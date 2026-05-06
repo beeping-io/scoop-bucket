@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/schema.json",
+  "version": "0.0.0",
+  "description": "Official Rust CLI for the Beeping Platform — data over sound",
+  "homepage": "https://github.com/beeping-io/beeping-cli",
+  "license": "Apache-2.0",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/beeping-io/beeping-cli/releases/download/v0.0.0/beeping-cli-x86_64-pc-windows-msvc.zip",
+      "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "extract_dir": "beeping-cli-x86_64-pc-windows-msvc"
+    }
+  },
+  "bin": "beeping.exe",
+  "shortcuts": [
+    [
+      "beeping.exe",
+      "beeping"
+    ]
+  ],
+  "checkver": {
+    "github": "https://github.com/beeping-io/beeping-cli"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/beeping-io/beeping-cli/releases/download/v$version/beeping-cli-x86_64-pc-windows-msvc.zip",
+        "extract_dir": "beeping-cli-x86_64-pc-windows-msvc"
+      }
+    }
+  },
+  "_comment": "BEE-151 bootstrap. SHA256 hash is a placeholder; BEE-1783 will rewrite it on every release via scoop's autoupdate. Until then, regenerate manually post-release."
+}
