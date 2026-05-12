@@ -18,22 +18,39 @@ scoop install beeping-cli
 
 ## How updates work
 
-The canonical manifest lives in
+The canonical manifest structure lives in
 [`beeping-io/beeping-cli`](https://github.com/beeping-io/beeping-cli)
-at `external/scoop-bucket/bucket/beeping-cli.json`. Each release
-automatically syncs the SHA256 hash here (BEE-1783, post-BEE-151
-bootstrap). Scoop's built-in `autoupdate` config in the manifest also
-lets `scoop update beeping-cli` resolve new versions from GitHub
-Releases independently.
+at `external/scoop-bucket/bucket/beeping-cli.json`. On every release
+of `beeping-cli`:
 
-**Direct edits to this repo will be overwritten** by the next release sync.
-File changes upstream in the source-of-truth repo.
+1. Its `release.yml` builds + signs + publishes the binaries with
+   `SHA256SUMS` (BEE-1780) + cosign + SBOM + SLSA L3 (BEE-1781).
+2. It fires a `repository_dispatch` event to this repo with the new
+   tag.
+3. This repo's [`auto-update.yml`](.github/workflows/auto-update.yml)
+   downloads `SHA256SUMS`, regenerates `bucket/beeping-cli.json` with
+   the real Windows ZIP hash + new version + URL via
+   [`scripts/regen-manifest.py`](scripts/regen-manifest.py), and
+   commits to `develop`.
+
+The regen script is deterministic — feeding the same tag twice
+produces the same manifest. Manual `workflow_dispatch` with a tag
+input is available as a fallback if the dispatch fails. Scoop's
+built-in `autoupdate` block in the manifest also lets
+`scoop update beeping-cli` resolve new versions independently as a
+third layer.
+
+**Direct edits to `bucket/beeping-cli.json`** in this repo will be
+overwritten on the next release. File any manifest-structure changes
+upstream in the source-of-truth repo's
+`external/scoop-bucket/bucket/beeping-cli.json`.
 
 ## Status
 
-Bootstrapped 2026-05-06 by BEE-151. Manifest uses a placeholder SHA256
-hash until the first `v0.0.x` tag of `beeping-cli` lands. Until then,
-`scoop install beeping-cli` will fail with a hash mismatch — expected.
+Bootstrapped 2026-05-06 by BEE-151. Auto-update wired 2026-05-12 by
+BEE-1783. Until the first `v0.0.x` tag of `beeping-cli` lands the
+manifest still carries a placeholder SHA256 hash — the first
+published release auto-fills it.
 
 ## License
 

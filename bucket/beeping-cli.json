@@ -29,5 +29,5 @@
       }
     }
   },
-  "_comment": "BEE-151 bootstrap. SHA256 hash is a placeholder; BEE-1783 will rewrite it on every release via scoop's autoupdate. Until then, regenerate manually post-release."
+  "_comment": "SHA256 hash + version + URL are auto-maintained by .github/workflows/auto-update.yml (BEE-1783): every published release of beeping-io/beeping-cli fires a repository_dispatch to this repo which downloads SHA256SUMS for the new tag, regenerates the manifest via scripts/regen-manifest.py, and commits to develop. The canonical structure of this file lives upstream at external/scoop-bucket/bucket/beeping-cli.json in beeping-io/beeping-cli; structural edits should land there first, then transplant here."
 }
